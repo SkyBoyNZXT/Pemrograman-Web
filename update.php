@@ -1,32 +1,24 @@
 <?php
-session_start();
-include 'koneksi.php'; // Pastikan file koneksi disertakan
 
-// Pastikan id ada di URL
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+//include koneksi database
+include('koneksi.php');
 
-    // Ambil data dari form yang akan diupdate
-    $name = $_POST['name'];
-    $clan = $_POST['clan'];
-    $chakra_element = $_POST['chakra_element'];
-    $ninja_rank = $_POST['ninja_rank'];
-    $special_technique = $_POST['special_technique'];
+//get data dari form
+$nama = $_POST['nama'];
+$username = $_POST['username'];
+$password = $_POST['password'];
+$email = $_POST['email'];
 
-    // Query update untuk memperbarui data berdasarkan id
-    $stmt = $conn->prepare("UPDATE naruto_characters SET name = ?, clan = ?, chakra_element = ?, ninja_rank = ?, special_technique = ? WHERE id = ?");
-    $stmt->bind_param("sssssi", $name, $clan, $chakra_element, $ninja_rank, $special_technique, $id);
+//query update data ke dalam database berdasarkan ID
+$query = "UPDATE user SET nama = '$nama', username = '$username', password = '$password', email = '$email' WHERE idUser = '$idUser'";
 
-    if ($stmt->execute()) {
-        header("Location: tampil.php?msg=Data berhasil diupdate");
-        exit();
-    } else {
-        echo "Error: " . $conn->error;
-    }
-    $stmt->close();
+//kondisi pengecekan apakah data berhasil diupdate atau tidak
+if($koneksi->query($query)) {
+    //redirect ke halaman tampil.php 
+    header("location: tampil.php");
 } else {
-    echo "ID tidak ditemukan dalam URL.";
+    //pesan error gagal update data
+    echo "Data Gagal Diupate!";
 }
 
-$conn->close();
 ?>

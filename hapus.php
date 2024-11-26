@@ -1,25 +1,16 @@
-<?php
-session_start();
-include 'koneksi.php'; // Sertakan file koneksi
+<?php 
+// koneksi database
+include 'koneksi.php';
+ 
+// menangkap data id yang di kirim dari url
+$id = $_GET['id'];
+ 
+ 
+// menghapus data dari database
+mysqli_query($koneksi,"delete from user where idUser='$id'");
 
-// Pastikan ID ada dalam URL
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
-
-    // Query untuk menghapus data berdasarkan ID
-    $stmt = $conn->prepare("DELETE FROM naruto_characters WHERE id = ?");
-    $stmt->bind_param("i", $id);
-
-    if ($stmt->execute()) {
-        header("Location: tampil.php?msg=Data berhasil dihapus");
-        exit();
-    } else {
-        echo "Error: " . $conn->error;
-    }
-    $stmt->close();
-} else {
-    echo "ID tidak ditemukan dalam URL.";
-}
-
-$conn->close();
+ 
+// mengalihkan halaman kembali ke index.php
+header("location:tampil.php");
+ 
 ?>
